@@ -41,6 +41,7 @@ public class ProductAddActivity extends AppCompatActivity {
     List<Category> categoryList;
     CategoryViewModel categoryViewModel;
     ActivityProductAddBinding binding;
+    ActivityResultLauncher<String> galleryLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,11 +110,7 @@ public class ProductAddActivity extends AppCompatActivity {
        binding.imgView.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               ImagePicker.with(ProductAddActivity.this)
-                       .crop()
-                       .compress(1024)
-                       .maxResultSize(1080, 1080)
-                       .start();
+               galleryLauncher.launch("image/*");
            }
        });
 
@@ -163,26 +160,16 @@ public class ProductAddActivity extends AppCompatActivity {
             }
 
         });
-
+        galleryLauncher = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                uri -> {
+                    if (uri != null) {
+                        imguri = uri;
+                        binding.imgView.setImageURI(imguri);
+                    }
+                }
+        );
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && data != null) {
 
-            imguri = data.getData();
-
-            binding.imgView.setImageURI(imguri);
-
-        } else if (resultCode == ImagePicker.RESULT_ERROR) {
-
-            Toast.makeText(
-                    this,
-                    ImagePicker.getError(data),
-                    Toast.LENGTH_SHORT
-            ).show();
-        }
-
-    }
     }
