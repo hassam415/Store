@@ -41,7 +41,7 @@ public class ProductAddActivity extends AppCompatActivity {
     List<Category> categoryList;
     CategoryViewModel categoryViewModel;
     ActivityProductAddBinding binding;
-    ActivityResultLauncher<String> galleryLauncher;
+    ActivityResultLauncher<String[]> galleryLauncher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,12 +107,9 @@ public class ProductAddActivity extends AppCompatActivity {
                     });
                 }
             });
-       binding.imgView.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               galleryLauncher.launch("image/*");
-           }
-       });
+        binding.imgView.setOnClickListener(v -> {
+            galleryLauncher.launch(new String[]{"image/*"});
+        });
 
         binding.addbtn.setOnClickListener(v -> {
             if (imguri == null) {
@@ -133,7 +130,9 @@ public class ProductAddActivity extends AppCompatActivity {
 
 
             Category selectedcategory = (Category) binding.CategorySpinner.getSelectedItem();
+
             product.setCategoryid(selectedcategory.getId());
+
             if (imguri != null) {
                 product.setImage(imguri.toString());
             } else {
@@ -161,15 +160,26 @@ public class ProductAddActivity extends AppCompatActivity {
 
         });
         galleryLauncher = registerForActivityResult(
-                new ActivityResultContracts.GetContent(),
+                new ActivityResultContracts.OpenDocument(),
                 uri -> {
                     if (uri != null) {
+                        try {
+                            getContentResolver().takePersistableUriPermission(
+                                    uri,
+                                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            );
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         imguri = uri;
                         binding.imgView.setImageURI(imguri);
                     }
                 }
         );
+
     }
+
 
 
     }
