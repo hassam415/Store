@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="grey">#5F6368</color>
+    <color name="primaryBlue">#2563EB</color>
+    <color name="primaryBlueDark">#1D4ED8</color>
+
+    <!-- Success -->
+    <color name="green">#10B981</color>
+
+    <!-- Danger -->
+    <color name="red">#EF4444</color>
+
+    <!-- Background -->
+    <color name="background">#F8FAFC</color>
+
+
+    <!-- Text -->
+    <color name="textPrimary">#1E293B</color>
+    <color name="darkBlue">#0F0E47</color>
+
+</resources>
