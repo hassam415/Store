@@ -1,8 +1,10 @@
 package com.example.test.Activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -15,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.room.Room;
 
@@ -31,6 +34,7 @@ import com.example.test.databinding.ActivityProductAddBinding;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -42,6 +46,8 @@ public class ProductAddActivity extends AppCompatActivity {
     CategoryViewModel categoryViewModel;
     ActivityProductAddBinding binding;
     ActivityResultLauncher<String[]> galleryLauncher;
+    private ActivityResultLauncher<Intent> cameraLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,6 +165,26 @@ public class ProductAddActivity extends AppCompatActivity {
             }
 
         });
+        binding.camerabtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    cameraLauncher.launch(cameraIntent);
+            }
+        });
+        cameraLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Bundle extras = result.getData().getExtras();
+                        Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+                        binding.imgView.setImageBitmap(imageBitmap);
+                        imguri = saveImageToInternalStorage(imageBitmap);
+                    }
+                }
+        );
         galleryLauncher = registerForActivityResult(
                 new ActivityResultContracts.OpenDocument(),
                 uri -> {
@@ -180,6 +206,28 @@ public class ProductAddActivity extends AppCompatActivity {
 
     }
 
+    private Uri saveImageToInternalStorage(Bitmap imageBitmap) {
+        File folder = new File(getFilesDir(), "images");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
 
+        String fileName = "IMG_" + System.currentTimeMillis() + ".jpg";
+        File file = new File(folder, fileName);
 
+        try (java.io.FileOutputStream fos = new java.io.FileOutputStream(file)) {
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return FileProvider.getUriForFile(
+                this,
+                getApplicationContext().getPackageName() + ".provider",
+                file
+        );
     }
+
+
+}

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
@@ -15,9 +16,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Test">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.test.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <activity
+            android:name=".CustomerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CustomerAddActivity"
+            android:exported="false" />
         <activity
             android:name=".Activities.DashBoardActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,8 +51,7 @@
             android:exported="false" />
         <activity
             android:name=".Activities.ProductActivity"
-            android:exported="true"/>
-
+            android:exported="true" />
     </application>
 
 </manifest>

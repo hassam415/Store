@@ -11,6 +11,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 
+import com.example.test.CustomerActivity;
+import com.example.test.CustomerAddActivity;
 import com.example.test.R;
 import com.example.test.databinding.ActivityDashBoardBinding;
 
@@ -40,6 +42,13 @@ ActivityDashBoardBinding binding;
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(DashBoardActivity.this, CategoryActivity.class);
+                startActivity(intent);
+            }
+        });
+        binding.cardCustomer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(DashBoardActivity.this, CustomerActivity.class);
                 startActivity(intent);
             }
         });
