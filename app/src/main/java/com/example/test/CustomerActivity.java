@@ -39,7 +39,7 @@ CustomerAdapter customerAdapter;
         customerViewModel=new CustomerViewModel(customerRepository);
       binding.customerrecyler.setHasFixedSize(true);
       binding.customerrecyler.setLayoutManager(new LinearLayoutManager(CustomerActivity.this));
-      customerAdapter=new CustomerAdapter(this,customerList,appDatabase,customerViewModel);
+      customerAdapter=new CustomerAdapter(this,customerList,appDatabase,customerViewModel,true);
       binding.customerrecyler.setAdapter(customerAdapter);
         binding.addbtn.setOnClickListener(new View.OnClickListener() {
             @Override

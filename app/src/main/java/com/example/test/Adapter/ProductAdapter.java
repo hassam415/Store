@@ -10,10 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.test.Activities.ProductActivity;
+import com.example.test.Activities.ProductListActivity;
 import com.example.test.AppDatabase;
 import com.example.test.Category;
 import com.example.test.CategoryRepository;
 import com.example.test.CategoryViewModel;
+import com.example.test.OnAdapterclick;
 import com.example.test.Product;
 import com.example.test.Activities.ProductAddActivity;
 import com.example.test.ProductViewModel;
@@ -32,16 +34,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
 ProductViewModel productViewModel;
 
 CategoryViewModel categoryViewModel;
+OnAdapterclick onAdapterclick;
 
-    public ProductAdapter(Context context, List<Product> productList, AppDatabase productDatabase, ProductViewModel productViewModel, CategoryViewModel categoryViewModel) {
+   //public void setOnAdapterclick(OnAdapterclick onAdapterclick) {
+     //   this.onAdapterclick = onAdapterclick;
+  //  }
+
+    boolean showIcon;
+
+    public ProductAdapter(Context context, List<Product> productList, AppDatabase productDatabase, ProductViewModel productViewModel, CategoryViewModel categoryViewModel, boolean showIcon) {
         this.context = context;
         this.productList = productList;
         this.productDatabase = productDatabase;
         this.productViewModel = productViewModel;
         this.categoryViewModel = categoryViewModel;
+        this.showIcon = showIcon;
     }
-
-
 
     @NonNull
     @Override
@@ -71,7 +79,13 @@ CategoryViewModel categoryViewModel;
                 });
             }
         });
-
+   if (showIcon){
+    holder.binding.updatBtn.setVisibility(View.VISIBLE);
+    holder.binding.deleteBtn.setVisibility(View.VISIBLE);
+   }else {
+    holder.binding.updatBtn.setVisibility(View.INVISIBLE);
+    holder.binding.deleteBtn.setVisibility(View.INVISIBLE);
+   }
 
 
 
@@ -103,8 +117,15 @@ context.startActivity(intent);
 
     }
 });
+   // holder.itemView.setOnClickListener(new View.OnClickListener() {
+    //  @Override
+    //  public void onClick(View v) {
+     // onAdapterclick.Onclick(position);
+   //  }
+   //});
 
     }
+
 
 
     @Override

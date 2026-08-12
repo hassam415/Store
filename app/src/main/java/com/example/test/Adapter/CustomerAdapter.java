@@ -15,6 +15,8 @@ import com.example.test.CategoryViewModel;
 import com.example.test.Customer;
 import com.example.test.CustomerAddActivity;
 import com.example.test.CustomerViewModel;
+import com.example.test.OnCustomerClick;
+import com.example.test.OrderActivity;
 import com.example.test.ViewHolder.CustomerViewHolder;
 import com.example.test.databinding.CustomerItemBinding;
 import com.squareup.picasso.Picasso;
@@ -27,12 +29,23 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerViewHolder> {
 
     AppDatabase appDatabase;
     CustomerViewModel customerViewModel;
+    Boolean showAction;
 
-    public CustomerAdapter(Context context, List<Customer> customerList, AppDatabase appDatabase, CustomerViewModel customerViewModel) {
+
+
+    public void setCustomerClick(OnCustomerClick customerClick) {
+        this.customerClick = customerClick;
+    }
+
+    OnCustomerClick customerClick;
+
+
+    public CustomerAdapter(Context context, List<Customer> customerList, AppDatabase appDatabase, CustomerViewModel customerViewModel, Boolean showAction) {
         this.context = context;
         this.customerList = customerList;
         this.appDatabase = appDatabase;
         this.customerViewModel = customerViewModel;
+        this.showAction = showAction;
     }
 
     @NonNull
@@ -69,6 +82,19 @@ holder.binding.updatBtn.setOnClickListener(new View.OnClickListener() {
         context.startActivity(intent);
     }
 });
+holder.itemView.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        customerClick.onClick(position);
+    }
+});
+if (showAction){
+    holder.binding.updatBtn.setVisibility(View.VISIBLE);
+    holder.binding.deleteBtn.setVisibility(View.VISIBLE);
+}else {
+    holder.binding.updatBtn.setVisibility(View.INVISIBLE);
+    holder.binding.deleteBtn.setVisibility(View.INVISIBLE);
+}
     }
 
     @Override

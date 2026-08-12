@@ -51,7 +51,7 @@ public class ProductActivity extends AppCompatActivity {
         CategoryRepository categoryRepository= new CategoryRepository(productDatabase.categoryInterface());
         categoryViewModel=new CategoryViewModel(categoryRepository);
         productViewModel=new ProductViewModel(productRepositry);
-        productAdapter = new ProductAdapter(this, productArrayList, productDatabase,productViewModel,categoryViewModel);
+        productAdapter = new ProductAdapter(this, productArrayList, productDatabase,productViewModel,categoryViewModel,true);
         binding.recyclerView.setAdapter(productAdapter);
 
         binding.addbt.setOnClickListener(new View.OnClickListener() {
